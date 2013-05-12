@@ -28,7 +28,7 @@
   - Author:
     - Name: Sindwiller
     - Link: http://opengameart.org/users/sindwiller
-  - License: CC-BY
+  - License: CC-BY-SA 3.0
   - Note: Used for ambient music for missions.
 * Gary Guns
   - Path: sounds/gary_guns/*
