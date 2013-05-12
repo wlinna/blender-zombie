@@ -1,0 +1,51 @@
+#+TITLE: Attributions
+
+* Pistol:
+  - Path: guns/pistol2/pistol.3ds
+  - Author: mrpoly
+  - License: CC0
+  - Link: http://opengameart.org/content/two-pistols
+  - Note: Currently in 3ds format for no good reason. Original is in
+    .blend-format
+
+
+* Gun Fire Texture
+  - Path: tex/gun_fire.xcf
+  - Author: William Linna (me)
+  - License: CC0
+  - Note: I did it
+
+* Benedictus
+  - Path: soundtracks/zero-project - Benedictus.ogg
+  - Author:
+    - Name: Zero Project
+    - Link: www.jamendo.com/en/artist/340121/zero-project
+  - License: CC-BY
+  - Note: Zero Project is awesome but I'd like to use other soundtrack than
+    Benedictus
+
+
+* Gary Guns
+  - Path: sounds/gary_guns/*
+  - Author:
+    - Name: Gary
+    - Link: http://fossilrecords.net/
+  - License: CC-BY-SA 3.0
+  - Link: http://opengameart.org/content/handling-guns
+  - Note: These are not in use yet
+
+* "Shots"
+  - Path: sounds/shots/*
+  - Author:
+    - Name: Michel Baradari
+    - Link: apollo-music.de
+  - License: CC-BY 3.0
+  - Link: http://opengameart.org/content/chaingun-pistol-rifle-shotgun-shots
+
+* Thin Zombie
+  - Path: models/basic_zombie/*
+  - Author:
+    - Name: Rosswet Mobile
+    - Link: rosswet.com
+  - License: CC-BY 3.0
+  - Link: http://opengameart.org/content/thin-zombie-awake-zombie-asset
