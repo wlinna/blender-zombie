@@ -15,16 +15,21 @@
   - License: CC0
   - Note: I did it
 
-* Benedictus
-  - Path: soundtracks/zero-project - Benedictus.ogg
+* The Forgotten Castle
+  - Path: soundtracks/theme.ogg
   - Author:
     - Name: Zero Project
     - Link: www.jamendo.com/en/artist/340121/zero-project
   - License: CC-BY
-  - Note: Zero Project is awesome but I'd like to use other soundtrack than
-    Benedictus
+  - Note: Currently not used
 
-
+* Snow May Never End
+  - Path: soundtracks/mission_01.ogg
+  - Author:
+    - Name: Sindwiller
+    - Link: http://opengameart.org/users/sindwiller
+  - License: CC-BY
+  - Note: Used for ambient music for missions.
 * Gary Guns
   - Path: sounds/gary_guns/*
   - Author:
