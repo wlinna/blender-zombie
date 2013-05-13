@@ -1,4 +1,4 @@
 *.pyc
 *.blend1
 *.blend2
-python/__pycache__
+python/__pycache__/
