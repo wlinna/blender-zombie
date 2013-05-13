@@ -7,7 +7,6 @@ def message(controller):
 
 
     if not subjects:
-        print('Received message with empty subject')
         return
 
     subject = subjects[0]

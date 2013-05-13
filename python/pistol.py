@@ -116,20 +116,18 @@ def reload_pistol(controller):
 def reload_gun(obj, controller):
     bullets = obj['bullets']
     clips = obj['clips']
-    clipsize = obj['clipsize']
+    clip_size = obj['clip_size']
     delay = obj['reload_delay']
     # act_reload = controller.actuators['reload']
 
-    if not obj['time_left'] <= 0.0:
+    if obj['time_left'] > 0.0:
         return
-    if bullets < clipsize:
+    if bullets < clip_size:
         if clips > 0:
             # controller.activate(act_reload)
-            obj['bullets'] = clipsize
+            obj['bullets'] = clip_size
             obj['clips'] -= 1
             obj['time_left'] = delay
-        else:
-            pass
     else:
         print("too much bullets to reload!")
 
