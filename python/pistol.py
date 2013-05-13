@@ -46,7 +46,7 @@ def message(controller):
         #     controller.deactivate(act)
         # else:
         #     controller.activate(act)
-        reload(controller)
+        reload_pistol(controller)
 
 
 def try_to_shoot(controller):
@@ -105,7 +105,7 @@ def ctrl_fx_shot(controller):
 
 ## Reloading code starts here
 
-def reload(controller):
+def reload_pistol(controller):
 
     # controller = bge.logic.getCurrentController()
     obj = controller.owner
@@ -118,13 +118,13 @@ def reload_gun(obj, controller):
     clips = obj['clips']
     clipsize = obj['clipsize']
     delay = obj['reload_delay']
-    act_reload = controller.actuators['reload']
+    # act_reload = controller.actuators['reload']
 
     if not obj['time_left'] <= 0.0:
         return
     if bullets < clipsize:
         if clips > 0:
-            controller.activate(act_reload)
+            # controller.activate(act_reload)
             obj['bullets'] = clipsize
             obj['clips'] -= 1
             obj['time_left'] = delay
