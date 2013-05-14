@@ -13,6 +13,10 @@ class Gun(bge.types.KX_GameObject):
         self.time_reload = 1.0  # How long it takes to reload
         self.bullets = 12
         self.clips = 4
+        self.fire_fx_size_max = 0.5
+        self.fire_fx_y = 0
+        self.fire_fx_x = 0
+        self.fire_fx_z = 0
         # This is useful for saving bullets when reloading
         # clip that is not empty
         self.total_bullets_left = self.bullets * self.clips
