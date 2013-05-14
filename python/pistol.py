@@ -45,7 +45,7 @@ def message(controller):
         #     controller.deactivate(act)
         # else:
         #     controller.activate(act)
-        reload_pistol(controller)
+        reload_gun(controller)
 
 
 def try_to_shoot(controller):
@@ -95,12 +95,9 @@ def ctrl_fx_shot(controller):
 
 ## Reloading code starts here
 
-def reload_pistol(controller):
+
+def reload_gun(controller):
     obj = controller.owner
-    reload_gun(obj, controller)
-
-
-def reload_gun(obj, controller):
     bullets = obj['bullets']
     clips = obj['clips']
     clip_size = obj['clip_size']
