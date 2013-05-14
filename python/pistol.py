@@ -26,7 +26,6 @@ def message(controller):
     sensor = controller.sensors['message']
     subjects = sensor.subjects
 
-
     if not subjects: return
 
     subject = subjects[0]
@@ -51,7 +50,6 @@ def message(controller):
 
 def try_to_shoot(controller):
     obj = controller.owner
-    set_bullets(controller, obj)
     # key = controller.sensors['mouse_lb']
 
     # if not key.positive:
@@ -81,14 +79,6 @@ def shoot(obj, controller):
             if target["health"] <= 0:
                 target.endObject()
 
-def set_bullets(controller, obj):
-    bullets = obj['bullets']
-    bullets_text = controller.actuators['bullets']
-
-    bullets_text.value = str(bullets)
-
-    controller.activate(bullets_text)
-
 ## Shooting effect code starts here
 
 def ctrl_fx_shot(controller):
@@ -106,11 +96,8 @@ def ctrl_fx_shot(controller):
 ## Reloading code starts here
 
 def reload_pistol(controller):
-
-    # controller = bge.logic.getCurrentController()
     obj = controller.owner
     reload_gun(obj, controller)
-    change_text(obj, controller)
 
 
 def reload_gun(obj, controller):
@@ -130,9 +117,3 @@ def reload_gun(obj, controller):
             obj['time_left'] = delay
     else:
         print("too much bullets to reload!")
-
-def change_text(obj, controller):
-    clips = obj['clips']
-    act_clips_text = controller.actuators['clips']
-    act_clips_text.value = str(clips)
-    controller.activate(act_clips_text)
