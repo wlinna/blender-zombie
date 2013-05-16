@@ -8,10 +8,11 @@ class Monster(bge.types.BL_ArmatureObject):
         """
         """
         print("Converted to monster")
+        self['health'] = 5
 
     def update(self):
         # FIXME: Remove this immediately when updating works
-        print("Updating monster")
+        pass
 
 def convert_to_monster(controller):
     old = controller.owner

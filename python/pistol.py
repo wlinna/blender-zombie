@@ -76,8 +76,8 @@ def shoot(obj, controller):
 
         if "health" in target:
             target["health"] -= 1
-            if target["health"] <= 0:
-                target.endObject()
+            # if target["health"] <= 0:
+            #     target.endObject()
 
 ## Shooting effect code starts here
 
