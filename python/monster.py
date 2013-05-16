@@ -7,13 +7,13 @@ class Monster(bge.types.BL_ArmatureObject):
     def __init__(self, old):
         """
         """
-        pass
+        print("Converted to monster")
 
     def update(self):
         # FIXME: Remove this immediately when updating works
         print("Updating monster")
 
-def convert_to_zombie(controller):
+def convert_to_monster(controller):
     old = controller.owner
     mutated = Monster(old)
 

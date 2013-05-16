@@ -6,8 +6,7 @@ class Gun(bge.types.KX_GameObject):
 
     def __init__(self, old):
         """
-        - `old`: old is the original object. You may not reference to it but
-        it's useful for reading properties
+        - `old`: old is the original object. You may not reference to it.
         """
         self.rate_fire = 0.3
         self.time_reload = 1.0  # How long it takes to reload
