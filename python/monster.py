@@ -9,10 +9,22 @@ class Monster(bge.types.BL_ArmatureObject):
         """
         print("Converted to monster")
         self['health'] = 5
+        self.is_alive = True
 
     def update(self):
-        # FIXME: Remove this immediately when updating works
-        pass
+        if self['health'] <= 0:
+            if self.is_alive:
+                self.die()
+            self.is_alive = False
+
+
+    def near_good_guy(self, controller):
+        if self.is_alive:
+            self.playAction('attack3', 0.0, 40.0)
+
+    def die(self):
+        self.playAction('dead1', 0.0, 40.0)
+
 
 def convert_to_monster(controller):
     old = controller.owner
@@ -24,3 +36,6 @@ def convert_to_monster(controller):
 
 def update(controller):
     controller.owner.update()
+
+def near_good_guy(controller):
+    controller.owner.near_good_guy(controller)
