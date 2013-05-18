@@ -30,7 +30,6 @@ EVT_RELOAD = next(counter)
 
 EVT_SHOOT = next(counter)
 
-
 key_bindings = {bge.events.SPACEKEY: EVT_JUMP
                 , bge.events.WKEY: EVT_FORWARD
                 , bge.events.AKEY: EVT_LEFT
