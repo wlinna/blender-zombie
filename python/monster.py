@@ -44,6 +44,10 @@ class Monster(bge.types.BL_ArmatureObject):
         if self.is_alive:
             self.playAction('attack3', 0.0, 40.0)
 
+    def see_good_guy(self, controller):
+        if self.is_alive:
+            self.playAction('walk2', 0.0, 41.0)
+
     def die(self):
         self.playAction('dead1', 0.0, 40.0)
 
@@ -71,3 +75,6 @@ def update(controller):
 
 def near_good_guy(controller):
     controller.owner.near_good_guy(controller)
+
+def see_good_guy(controller):
+    controller.owner.see_good_guy(controller)
