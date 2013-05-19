@@ -31,6 +31,7 @@ class Monster(bge.types.BL_ArmatureObject):
         print("Converted to monster")
         self['health'] = 5
         self.is_alive = True
+        self.is_near_good_guy = False
 
     def update(self):
         if self['health'] <= 0:
@@ -39,20 +40,31 @@ class Monster(bge.types.BL_ArmatureObject):
             self.is_alive = False
             if self['disappear'] > TIME_TO_DISAPPEAR:
                 self.endObject()
+            return
+
+        if self.localLinearVelocity[1] < -0.01:
+            self.playAction('walk2', 0.0, 41.0, 0, 2, 0, bge.logic.KX_ACTION_MODE_LOOP)
 
 
     def near_good_guy(self, controller):
         if self.is_alive:
-            self.playAction('attack3', 0.0, 40.0)
+            self.playAction('attack3', 0.0, 40.0, 0, 1, 0.5)
+            # if controller.sensors['attack_distance'].positive:
+            # self.is_near_good_guy = True
+            # else:
+            # self.is_near_good_guy = False
+
 
     def see_good_guy(self, controller):
         if self.is_alive:
-            self.playAction('walk2', 0.0, 41.0)
             # self.setLinearVelocity([0, -4.0, 0], True)
+            # if not self.is_near_good_guy:
             controller.activate(self.actuators['face_good_guy'])
+            # else:
+            #     controller.deactivate(self.actuators['face_good_guy'])
 
     def die(self):
-        self.playAction('dead1', 0.0, 40.0)
+        self.playAction('dead1', 0.0, 40.0, 0, 0)
         self['disappear'] = 0.0
         # self.suspendDynamics()
         # self.setOcclusion(False, True)
