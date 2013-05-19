@@ -48,6 +48,8 @@ class Monster(bge.types.BL_ArmatureObject):
     def see_good_guy(self, controller):
         if self.is_alive:
             self.playAction('walk2', 0.0, 41.0)
+            # self.setLinearVelocity([0, -4.0, 0], True)
+            controller.activate(self.actuators['face_good_guy'])
 
     def die(self):
         self.playAction('dead1', 0.0, 40.0)
