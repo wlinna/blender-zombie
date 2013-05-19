@@ -19,6 +19,7 @@
 
 import bge
 
+TIME_TO_DISAPPEAR = 2.0  # Seconds
 
 class Monster(bge.types.BL_ArmatureObject):
     """ Base class for all monsters like zombies
@@ -36,8 +37,8 @@ class Monster(bge.types.BL_ArmatureObject):
             if self.is_alive:
                 self.die()
             self.is_alive = False
-            return
-
+            if self['disappear'] > TIME_TO_DISAPPEAR:
+                self.endObject()
 
 
     def near_good_guy(self, controller):
@@ -50,7 +51,7 @@ class Monster(bge.types.BL_ArmatureObject):
 
     def die(self):
         self.playAction('dead1', 0.0, 40.0)
-
+        self['disappear'] = 0.0
         # self.suspendDynamics()
         # self.setOcclusion(False, True)
         # self.disableRigidBody()
