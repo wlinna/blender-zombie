@@ -20,6 +20,8 @@
 import bge
 
 TIME_TO_DISAPPEAR = 2.0  # Seconds
+TIME_TO_DODGE = 0.7
+
 
 class Monster(bge.types.BL_ArmatureObject):
     """ Base class for all monsters like zombies
@@ -49,11 +51,15 @@ class Monster(bge.types.BL_ArmatureObject):
     def near_good_guy(self, controller):
         if self.is_alive:
             self.playAction('attack3', 0.0, 40.0, 0, 1, 0.5)
-            # if controller.sensors['attack_distance'].positive:
-            # self.is_near_good_guy = True
-            # else:
-            # self.is_near_good_guy = False
+            if self.getActionFrame() == 0:
+                self['time_near'] = 0.0
 
+        if self['time_near'] >= TIME_TO_DODGE:
+            print("attacked")
+            self['time_near'] = 0
+            sensor_attack_distance = controller.sensors['attack_distance']
+            target = sensor_attack_distance.hitObject
+            target['health'] -= 1
 
     def see_good_guy(self, controller):
         if self.is_alive:
