@@ -1,4 +1,6 @@
 import bge
+from python import text
+
 
 def message(controller):
     obj = controller.owner
@@ -46,3 +48,14 @@ def message(controller):
             controller.deactivate(act)
         else:
             controller.activate(act)
+
+
+def health_changed(controller):
+    sensor = controller.sensors['property_changed']
+    print(sensor.propName)
+
+    if sensor.propName == "health":
+        health = controller.owner['health']
+        if health <= 0:
+            text_obj = text.TextObject("Dead", 0.5, 0.5, 100, 0)
+            text.text_objects.append(text_obj)

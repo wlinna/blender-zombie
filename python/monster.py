@@ -19,6 +19,7 @@
 
 import bge
 
+
 TIME_TO_DISAPPEAR = 2.0  # Seconds
 TIME_TO_DODGE = 0.7
 
