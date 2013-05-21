@@ -33,6 +33,7 @@ class Monster(bge.types.BL_ArmatureObject):
         print("Converted to monster")
         self['health'] = 5
         self.is_alive = True
+        self.attacked = False
         self.is_near_good_guy = False
 
     def update(self):
@@ -53,8 +54,10 @@ class Monster(bge.types.BL_ArmatureObject):
             self.playAction('attack3', 0.0, 40.0, 0, 1, 0.5)
             if self.getActionFrame() == 0:
                 self['time_near'] = 0.0
+                self.attacked = False
 
-        if self['time_near'] >= TIME_TO_DODGE:
+        if self['time_near'] >= TIME_TO_DODGE and not self.attacked:
+            self.attacked = True
             print("attacked")
             self['time_near'] = 0
             sensor_attack_distance = controller.sensors['attack_distance']
