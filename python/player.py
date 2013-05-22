@@ -2,78 +2,105 @@ import bge
 from python import text, effect
 
 
-def message(controller):
-    obj = controller.owner
-    sensor = controller.sensors['message']
-    subjects = sensor.subjects
+class Player(bge.types.BL_ArmatureObject):
+    def __init__(self, old):
+        self.health = self['health']
+        self.blood_effects = []
+
+    def update(self, controller):
+        if self['time_since_hit'] > 0.4 and self['blood_active']:
+            scene = bge.logic.getCurrentScene()
+            # FIXME: Make update remove the correct effect, not just last one
+            scene.post_draw.remove(self.blood_effects.pop())
+            print("Removed effect")
+            if not scene.post_draw:
+                self['blood_active'] = False
 
 
-    if not subjects:
-        return
-
-    subject = subjects[0]
-    body = sensor.bodies[0]
-
-    if subject == 'jump':
-        act = obj.actuators[subject]
-        if sensor.bodies[0] == 'stop':
-            controller.deactivate(act)
-        else:
-            controller.activate(act)
-
-    if subject == 'forward':
-        act = obj.actuators[subject]
-        if sensor.bodies[0] == 'stop':
-            controller.deactivate(act)
-        else:
-            controller.activate(act)
-
-    if subject == 'left':
-        act = obj.actuators[subject]
-        if sensor.bodies[0] == 'stop':
-            controller.deactivate(act)
-        else:
-            controller.activate(act)
-
-    if subject == 'backward':
-        act = obj.actuators[subject]
-        if sensor.bodies[0] == 'stop':
-            controller.deactivate(act)
-        else:
-            controller.activate(act)
-
-    if subject == 'right':
-        act = obj.actuators[subject]
-        if sensor.bodies[0] == 'stop':
-            controller.deactivate(act)
-        else:
-            controller.activate(act)
+    def message(self, controller):
+        sensor = controller.sensors['message']
+        subjects = sensor.subjects
 
 
-def health_changed(controller):
-    sensor = controller.sensors['property_changed']
-    print(sensor.propName)
+        if not subjects:
+            return
 
-    if sensor.propName == "health":
-        obj = controller.owner
-        health = obj['health']
-        scene = bge.logic.getCurrentScene()
-        fx = effect.blood_screen()
-        print(obj['time_since_hit'])
+        subject = subjects[0]
+        body = sensor.bodies[0]
 
-        obj['blood_active'] = True
-        obj['time_since_hit'] = 0.0
-        # controller.activate(controller.actuators['hit_effect'])
-        if health <= 0:
-            text_obj = text.TextObject("Dead", 0.5, 0.5, 100, 0)
-            text.text_objects.append(text_obj)
+        if subject == 'jump':
+            act = self.actuators[subject]
+            if sensor.bodies[0] == 'stop':
+                controller.deactivate(act)
+            else:
+                controller.activate(act)
+
+        if subject == 'forward':
+            act = self.actuators[subject]
+            if sensor.bodies[0] == 'stop':
+                controller.deactivate(act)
+            else:
+                controller.activate(act)
+
+        if subject == 'left':
+            act = self.actuators[subject]
+            if sensor.bodies[0] == 'stop':
+                controller.deactivate(act)
+            else:
+                controller.activate(act)
+
+        if subject == 'backward':
+            act = self.actuators[subject]
+            if sensor.bodies[0] == 'stop':
+                controller.deactivate(act)
+            else:
+                controller.activate(act)
+
+        if subject == 'right':
+            act = self.actuators[subject]
+            if sensor.bodies[0] == 'stop':
+                controller.deactivate(act)
+            else:
+                controller.activate(act)
+
+    def health_changed(self, controller):
+        sensor = controller.sensors['property_changed']
+        print(sensor.propName)
+
+        if sensor.propName == "health":
+            obj = controller.owner
+            health = obj['health']
+            scene = bge.logic.getCurrentScene()
+
+            # FIXME: Check if player got health or lost health
+            # before showing blood effect
+            fx = effect.blood_screen()
+            self.blood_effects.append(fx)
+
+            obj['blood_active'] = True
+            obj['time_since_hit'] = 0.0
+            # controller.activate(controller.actuators['hit_effect'])
+            if health <= 0:
+                text_obj = text.TextObject("Dead", 0.5, 0.5, 100, 0)
+                text.text_objects.append(text_obj)
+
+
+
+def convert_to_player(controller):
+    old = controller.owner
+    mutated = Player(old)
+
+    assert(old is not mutated)
+    assert(old.invalid)
+    assert(mutated is controller.owner)
+    print("Converted to player object")
+
 
 def update(controller):
-    obj = controller.owner
-    if obj['time_since_hit'] > 0.4 and obj['blood_active']:
-        scene = bge.logic.getCurrentScene()
-        # FIXME: Make update remove the correct effect, not just last one
-        scene.post_draw.pop()
-        print("Removed effect")
-        if not scene.post_draw:
-            obj['blood_active'] = False
+    controller.owner.update(controller)
+
+def message(controller):
+    controller.owner.message(controller)
+
+def health_changed(controller):
+    controller.owner.health_changed(controller)

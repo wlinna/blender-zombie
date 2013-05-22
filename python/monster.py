@@ -31,7 +31,6 @@ class Monster(bge.types.BL_ArmatureObject):
     def __init__(self, old):
         """
         """
-        print("Converted to monster")
         self['health'] = 5
         self.is_alive = True
         self.attacked = False

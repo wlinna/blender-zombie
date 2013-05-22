@@ -36,12 +36,12 @@ def blood_screen():
 
         bgl.glEnable(bgl.GL_BLEND)
         bgl.glColor4f(0.8, 0.0, 0.0, 0.4)
-        # bgl.glRecti(0, 0, width, height)
-        bgl.glBegin(bgl.GL_QUADS)
-        bgl.glVertex2i(0, 0)
-        bgl.glVertex2i(width, 0)
-        bgl.glVertex2i(width, height)
-        bgl.glVertex2i(0, height)
+        bgl.glRecti(0, 0, width, height)
+        # bgl.glBegin(bgl.GL_QUADS)
+        # bgl.glVertex2i(0, 0)
+        # bgl.glVertex2i(width, 0)
+        # bgl.glVertex2i(width, height)
+        # bgl.glVertex2i(0, height)
 
         # bgl.glVertex2f(0.0, 0.0)
         # bgl.glVertex2f(1.0, 0.0)
@@ -50,7 +50,7 @@ def blood_screen():
 
 
 
-        bgl.glEnd()
+        # bgl.glEnd()
         bgl.glDisable(bgl.GL_BLEND)
     scene.post_draw.append(fx)
     return fx
