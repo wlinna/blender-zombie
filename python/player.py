@@ -25,43 +25,55 @@ class Player(bge.types.BL_ArmatureObject):
         if not subjects:
             return
 
-        subject = subjects[0]
-        body = sensor.bodies[0]
+        print(subjects)
+        for i in range(len(subjects)):
+            subject = subjects[i]
+            body = sensor.bodies[i]
+            is_simple_motion = False
+            local_linear_velocity = [0.0, 0.0, 0.0]
+            if subject == 'jump':
+                act = self.actuators[subject]
+                if sensor.bodies[0] == 'stop':
+                    controller.deactivate(act)
+                else:
+                    controller.activate(act)
 
-        if subject == 'jump':
-            act = self.actuators[subject]
-            if sensor.bodies[0] == 'stop':
-                controller.deactivate(act)
-            else:
-                controller.activate(act)
+            if subject == 'forward':
+                is_simple_motion = True
+                act = self.actuators[subject]
+                if sensor.bodies[0] == 'stop':
+                    controller.deactivate(act)
+                else:
+                    controller.activate(act)
 
-        if subject == 'forward':
-            act = self.actuators[subject]
-            if sensor.bodies[0] == 'stop':
-                controller.deactivate(act)
-            else:
-                controller.activate(act)
+            if subject == 'left':
+                is_simple_motion = True
+                act = self.actuators[subject]
+                if sensor.bodies[0] == 'stop':
+                    controller.deactivate(act)
+                else:
+                    controller.activate(act)
 
-        if subject == 'left':
-            act = self.actuators[subject]
-            if sensor.bodies[0] == 'stop':
-                controller.deactivate(act)
-            else:
-                controller.activate(act)
+            if subject == 'backward':
+                is_simple_motion = True
+                act = self.actuators[subject]
+                if sensor.bodies[0] == 'stop':
+                    controller.deactivate(act)
+                else:
+                    controller.activate(act)
 
-        if subject == 'backward':
-            act = self.actuators[subject]
-            if sensor.bodies[0] == 'stop':
-                controller.deactivate(act)
-            else:
-                controller.activate(act)
+            if subject == 'right':
+                is_simple_motion = True
+                act = self.actuators[subject]
+                if sensor.bodies[0] == 'stop':
+                    controller.deactivate(act)
+                else:
+                    controller.activate(act)
 
-        if subject == 'right':
-            act = self.actuators[subject]
-            if sensor.bodies[0] == 'stop':
-                controller.deactivate(act)
-            else:
-                controller.activate(act)
+        # if is_simple_motion:
+        #     act = self.actuators['movement']
+        #     act.useLocalLinV = True
+
 
     def health_changed(self, controller):
         sensor = controller.sensors['property_changed']
