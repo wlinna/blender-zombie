@@ -35,7 +35,7 @@ def blood_screen():
 
 
         bgl.glEnable(bgl.GL_BLEND)
-        bgl.glColor4f(0.8, 0.0, 0.0, 0.4)
+        bgl.glColor4f(0.8, 0.0, 0.0, 0.1)
         bgl.glRecti(0, 0, width, height)
         # bgl.glBegin(bgl.GL_QUADS)
         # bgl.glVertex2i(0, 0)
