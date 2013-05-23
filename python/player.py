@@ -13,7 +13,7 @@ class Player(bge.types.BL_ArmatureObject):
             # FIXME: Make update remove the correct effect, not just last one
             scene.post_draw.remove(self.blood_effects.pop())
             print("Removed effect")
-            if not scene.post_draw:
+            if not self.blood_effects:
                 self['blood_active'] = False
 
 
