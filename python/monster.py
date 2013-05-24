@@ -58,7 +58,6 @@ class Monster(bge.types.BL_ArmatureObject):
 
         if self['time_near'] >= TIME_TO_DODGE and not self.attacked:
             self.attacked = True
-            print("attacked")
             self['time_near'] = 0
             sensor_attack_distance = controller.sensors['attack_distance']
             target = sensor_attack_distance.hitObject

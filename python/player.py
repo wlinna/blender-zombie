@@ -6,78 +6,61 @@ class Player(bge.types.BL_ArmatureObject):
     def __init__(self, old):
         self.health = self['health']
         self.blood_effects = []
+        self.character = bge.constraints.getCharacter(self)
+        self.key_status = {
+            'forward': False
+            , 'backward': False
+            , 'left': False
+            , 'right': False
+            , 'jump': False
+        }
 
     def update(self, controller):
+        if self['health'] <= 0:
+            return
         if self['time_since_hit'] > 0.4 and self['blood_active']:
             scene = bge.logic.getCurrentScene()
             # FIXME: Make update remove the correct effect, not just last one
             scene.post_draw.remove(self.blood_effects.pop())
-            print("Removed effect")
             if not self.blood_effects:
                 self['blood_active'] = False
 
+        key_status = self.key_status
+        dy = 0.0
+        if key_status['forward']:
+            dy -= self['speed_forward']
+        if key_status['backward']:
+            dy += self['speed_backward']
+
+        dx = 0.0
+        if key_status['left']:
+            dx += self['speed_strafe']
+        if key_status['right']:
+            dx -= self['speed_strafe']
+
+        act_motion = self.actuators['movement']
+        act_motion.dLoc = [dx, dy, 0]
+        act_motion.useLocalDLoc = True
+        controller.activate(act_motion)
+
+        if key_status['jump']:
+            self.character.jump()
 
     def message(self, controller):
         sensor = controller.sensors['message']
         subjects = sensor.subjects
 
-
-        if not subjects:
-            return
-
-        print(subjects)
         for i in range(len(subjects)):
             subject = subjects[i]
             body = sensor.bodies[i]
-            is_simple_motion = False
-            local_linear_velocity = [0.0, 0.0, 0.0]
-            if subject == 'jump':
-                act = self.actuators[subject]
-                if sensor.bodies[0] == 'stop':
-                    controller.deactivate(act)
+            if subject in self.key_status.keys():
+                if body == 'stop':
+                    self.key_status[subject] = False
                 else:
-                    controller.activate(act)
-
-            if subject == 'forward':
-                is_simple_motion = True
-                act = self.actuators[subject]
-                if sensor.bodies[0] == 'stop':
-                    controller.deactivate(act)
-                else:
-                    controller.activate(act)
-
-            if subject == 'left':
-                is_simple_motion = True
-                act = self.actuators[subject]
-                if sensor.bodies[0] == 'stop':
-                    controller.deactivate(act)
-                else:
-                    controller.activate(act)
-
-            if subject == 'backward':
-                is_simple_motion = True
-                act = self.actuators[subject]
-                if sensor.bodies[0] == 'stop':
-                    controller.deactivate(act)
-                else:
-                    controller.activate(act)
-
-            if subject == 'right':
-                is_simple_motion = True
-                act = self.actuators[subject]
-                if sensor.bodies[0] == 'stop':
-                    controller.deactivate(act)
-                else:
-                    controller.activate(act)
-
-        # if is_simple_motion:
-        #     act = self.actuators['movement']
-        #     act.useLocalLinV = True
-
+                    self.key_status[subject] = True
 
     def health_changed(self, controller):
         sensor = controller.sensors['property_changed']
-        print(sensor.propName)
 
         if sensor.propName == "health":
             obj = controller.owner
@@ -105,8 +88,6 @@ def convert_to_player(controller):
     assert(old is not mutated)
     assert(old.invalid)
     assert(mutated is controller.owner)
-    print("Converted to player object")
-
 
 def update(controller):
     controller.owner.update(controller)
