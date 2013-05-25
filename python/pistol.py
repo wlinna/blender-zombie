@@ -54,13 +54,16 @@ def try_to_shoot(controller):
 
     # if not key.positive:
     #     return
-    if obj['bullets'] > 0:
-        if obj['time_left'] <= 0:
-            shoot(obj, controller)
+    if obj['bullets'] <= 0:
+        return
+
+    if obj['timer_shoot'] < obj['delay']:
+        return
+
+    shoot(obj, controller)
 
 
 def shoot(obj, controller):
-    # act_shoot = controller.actuators['shoot']
     scene = bge.logic.getCurrentScene()
     ray = controller.sensors['gun_ray']
     delay = obj['delay']
@@ -70,7 +73,7 @@ def shoot(obj, controller):
 
     fx_object.setParent(obj, False, True) # compound=False, Ghost=True
     obj['bullets'] -= 1
-    obj['time_left'] = delay
+    obj['timer_shoot'] = 0.0
     if ray.positive:
         target = ray.hitObject
 
@@ -102,15 +105,11 @@ def reload_gun(controller):
     clips = obj['clips']
     clip_size = obj['clip_size']
     delay = obj['reload_delay']
-    # act_reload = controller.actuators['reload']
 
-    if obj['time_left'] > 0.0:
+    if obj['timer_shoot'] < obj['delay']:
         return
     if bullets < clip_size:
         if clips > 0:
-            # controller.activate(act_reload)
             obj['bullets'] = clip_size
             obj['clips'] -= 1
-            obj['time_left'] = delay
-    else:
-        print("too much bullets to reload!")
+            obj['timer_shoot'] = 0.0
