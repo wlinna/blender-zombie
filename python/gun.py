@@ -16,8 +16,12 @@
 #
 # ##### END GPL LICENSE BLOCK #####
 
-
+import random
 import bge
+
+
+GUN_FIRE_SCALE_RANGE = (0.0, 0.38)
+
 
 class Gun(bge.types.KX_GameObject):
     """
@@ -30,8 +34,6 @@ class Gun(bge.types.KX_GameObject):
         self.rate_fire = 0.3
         self.time_reload = 1.0  # How long it takes to reload
         self.clip_size = 12
-        self.clips = [self.clip_size, self.clip_size, self.clip_size]
-        self.fire_fx_size_max = 0.5
 
 
     def message(self, controller):
@@ -55,13 +57,6 @@ class Gun(bge.types.KX_GameObject):
         pass
 
     def reload(self):
-
-        # This will be used. DO NOT REMOVE
-        # if not self.clips:
-        #     print("No clips left")
-        #     return
-        # old_clip = self.clips.pop(0)
-
         bullets = self['bullets']
         clips = self['clips']
         clip_size = self['clip_size']
@@ -88,13 +83,12 @@ class Gun(bge.types.KX_GameObject):
     def shoot(self, controller):
         scene = bge.logic.getCurrentScene()
         ray = controller.sensors['gun_ray']
-        # THIS WILL REPLACE bullets-property
-        # self.clips[0] -= 1
-        self['bullets'] -= 1  # This will be removed after migration is ready
+        self['bullets'] -= 1
         self['timer_shoot'] = 0.0
 
         fx_object = scene.addObject("fx_gun_shot", self, 60)
         fx_object.setParent(self, False, True)
+        print(fx_object.worldScale)
 
         if ray.positive:
             target = ray.hitObject
@@ -125,6 +119,8 @@ def ctrl_fx_shot(controller):
 
     point_gun_fire_obj = obj.parent.childrenRecursive['point_gun_fire']
     fire_object = scene.addObject("gun_fire", "point_gun_fire", 1)
+    scale = random.uniform(GUN_FIRE_SCALE_RANGE[0], GUN_FIRE_SCALE_RANGE[1])
+    fire_object.localScale = [scale, scale, scale]
     fire_object.setParent(point_gun_fire_obj, False, True)
 
     act_sound = obj.actuators['sound']

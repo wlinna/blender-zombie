@@ -6,6 +6,7 @@ class Player(bge.types.BL_ArmatureObject):
     def __init__(self, old):
         self.health = self['health']
         self.blood_effects = []
+        self.gun = None
         self.character = bge.constraints.getCharacter(self)
         self.key_status = {
             'forward': False
@@ -89,11 +90,14 @@ def convert_to_player(controller):
     assert(old.invalid)
     assert(mutated is controller.owner)
 
+
 def update(controller):
     controller.owner.update(controller)
 
+
 def message(controller):
     controller.owner.message(controller)
+
 
 def health_changed(controller):
     controller.owner.health_changed(controller)
