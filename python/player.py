@@ -17,6 +17,7 @@ class Player(bge.types.BL_ArmatureObject):
 
     def update(self, controller):
         if self['health'] <= 0:
+            controller.deactivate(self.actuators['movement'])
             return
         if self['time_since_hit'] > 0.4 and self['blood_active']:
             scene = bge.logic.getCurrentScene()
@@ -78,7 +79,6 @@ class Player(bge.types.BL_ArmatureObject):
             if health <= 0:
                 text_obj = text.TextObject("Dead", 0.5, 0.5, 100, 0)
                 text.text_objects.append(text_obj)
-
 
 
 def convert_to_player(controller):
