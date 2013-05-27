@@ -56,24 +56,11 @@ class Gun(bge.types.KX_GameObject):
         pass
 
     def reload(self):
-        bullets = self['bullets']
-        clips = self['clips']
-        clip_size = self['clip_size']
-        delay = self['reload_delay']
-
-        if self['timer_shoot'] < self['delay']:
-            return
-        if bullets < clip_size:
-            if clips > 0:
-                self['bullets'] = clip_size
-                self['clips'] -= 1
-                self['timer_shoot'] = 0.0
+        self['timer_shoot'] = 0.0
+        # TODO: Do animation first, then reload
+        self.sendMessage('reload_successful', '', 'player')
 
     def try_to_shoot(self, controller):
-        if self['bullets'] <= 0:
-            # TODO: Play empty clip sound
-            return
-
         if self['timer_shoot'] < self['delay']:
             return
 
@@ -82,7 +69,7 @@ class Gun(bge.types.KX_GameObject):
     def shoot(self, controller):
         scene = bge.logic.getCurrentScene()
         ray = controller.sensors['gun_ray']
-        self['bullets'] -= 1
+        self.sendMessage('shooting_succesful', '', 'player')
         self['timer_shoot'] = 0.0
 
         fx_object = scene.addObject("fx_gun_shot", self, 60)

@@ -24,14 +24,19 @@ class Player(bge.types.BL_ArmatureObject):
     def __init__(self, old):
         self.health = self['health']
         self.blood_effects = []
-        self.gun = None
+        scene = bge.logic.getCurrentScene()
+        # FIXME: Get gun somewhere else. This is semi dangerous
+        self.gun = scene.objects['pistol']
         self.character = bge.constraints.getCharacter(self)
-        self.key_status = {
+        self.clips_pistol = [12, 12, 12, 12]  # Temporary solution
+        self.input_status = {
             'forward': False
             , 'backward': False
             , 'left': False
             , 'right': False
             , 'jump': False
+            , 'shoot': False
+            , 'reload': False
         }
 
     def update(self, controller):
@@ -44,17 +49,17 @@ class Player(bge.types.BL_ArmatureObject):
             if not self.blood_effects:
                 self['blood_active'] = False
 
-        key_status = self.key_status
+        input_status = self.input_status
         dy = 0.0
-        if key_status['forward']:
+        if input_status['forward']:
             dy -= self['speed_forward']
-        if key_status['backward']:
+        if input_status['backward']:
             dy += self['speed_backward']
 
         dx = 0.0
-        if key_status['left']:
+        if input_status['left']:
             dx += self['speed_strafe']
-        if key_status['right']:
+        if input_status['right']:
             dx -= self['speed_strafe']
 
         act_motion = self.actuators['movement']
@@ -62,8 +67,15 @@ class Player(bge.types.BL_ArmatureObject):
         act_motion.useLocalDLoc = True
         controller.activate(act_motion)
 
-        if key_status['jump']:
+        if input_status['jump']:
             self.character.jump()
+
+
+        if input_status['reload']:
+            self.try_reload()
+        if input_status['shoot']:
+            if self.clips_pistol and self.clips_pistol[0] > 0:
+                self.sendMessage('shoot', '', self.gun.name)
 
     def message(self, controller):
         sensor = controller.sensors['message']
@@ -72,11 +84,17 @@ class Player(bge.types.BL_ArmatureObject):
         for i in range(len(subjects)):
             subject = subjects[i]
             body = sensor.bodies[i]
-            if subject in self.key_status.keys():
+            if subject in self.input_status.keys():
                 if body == 'stop':
-                    self.key_status[subject] = False
+                    self.input_status[subject] = False
                 else:
-                    self.key_status[subject] = True
+                    self.input_status[subject] = True
+
+            if subject == 'shooting_succesful':
+                self.clips_pistol[0] -= 1
+
+            if subject == 'reload_successful':
+                self.reload()
 
     def health_changed(self, controller):
         sensor = controller.sensors['property_changed']
@@ -97,6 +115,29 @@ class Player(bge.types.BL_ArmatureObject):
             if health <= 0:
                 text_obj = text.TextObject("Dead", 0.5, 0.5, 100, 0)
                 text.text_objects.append(text_obj)
+
+    def try_reload(self):
+        if not self.clips_pistol:
+            return
+
+        if self.clips_pistol[0] == self.gun['clip_size']:
+            return
+
+        if len(self.clips_pistol) == 1:
+            return
+
+        if self.gun['timer_shoot'] < self.gun['reload_delay']:
+            return
+
+        self.sendMessage('reload', '', self.gun.name)
+
+
+    def reload(self):
+        old_clip = self.clips_pistol.pop(0)
+        if old_clip > 0:
+            self.clips_pistol.append(old_clip)
+
+        print("Clips after reload:", self.clips_pistol)
 
 
 def convert_to_player(controller):
