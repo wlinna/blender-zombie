@@ -35,7 +35,6 @@ class Gun(bge.types.KX_GameObject):
         self.time_reload = 1.0  # How long it takes to reload
         self.clip_size = 12
 
-
     def message(self, controller):
         sensor = controller.sensors['message']
         subjects = sensor.subjects
@@ -88,7 +87,6 @@ class Gun(bge.types.KX_GameObject):
 
         fx_object = scene.addObject("fx_gun_shot", self, 60)
         fx_object.setParent(self, False, True)
-        print(fx_object.worldScale)
 
         if ray.positive:
             target = ray.hitObject
