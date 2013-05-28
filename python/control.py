@@ -27,6 +27,7 @@ EVT_BACKWARD = next(counter)
 EVT_LEFT = next(counter)
 EVT_RIGHT = next(counter)
 EVT_RELOAD = next(counter)
+EVT_THROW = next(counter)
 
 EVT_SHOOT = next(counter)
 
@@ -36,6 +37,7 @@ key_bindings = {bge.events.SPACEKEY: EVT_JUMP
                 , bge.events.SKEY: EVT_BACKWARD
                 , bge.events.DKEY: EVT_RIGHT
                 , bge.events.RKEY: EVT_RELOAD
+                , bge.events.QKEY: EVT_THROW
            }
 
 mouse_bindings = {bge.events.LEFTMOUSE: EVT_SHOOT}
@@ -58,6 +60,8 @@ def key_event(controller):
                 obj.sendMessage('jump', '', 'player')
             if event == EVT_RELOAD:
                 obj.sendMessage('reload', '', 'player')
+            if event == EVT_THROW:
+                obj.sendMessage('throw', '', 'player')
 
         elif status == bge.logic.KX_INPUT_JUST_RELEASED:
             if event == EVT_FORWARD:
@@ -72,6 +76,9 @@ def key_event(controller):
                 obj.sendMessage('jump', 'stop', 'player')
             if event == EVT_RELOAD:
                 obj.sendMessage('reload', 'stop', 'player')
+            if event == EVT_THROW:
+                obj.sendMessage('throw', 'stop', 'player')
+
 
 def mouse_always(controller):
     # sensor = controller.sensor

@@ -77,7 +77,11 @@ class Player(bge.types.BL_ArmatureObject):
         if input_status['reload']:
             self.try_reload()
         if input_status['shoot']:
-            if self.clips_pistol and self.clips_pistol[0] > 0:
+            conditions = bool(self.weapon) \
+                         and self.clips_pistol \
+                         and self.clips_pistol[0] > 0
+
+            if conditions:
                 self.sendMessage('shoot', '', self.weapon.name)
 
     def message(self, controller):
@@ -98,6 +102,9 @@ class Player(bge.types.BL_ArmatureObject):
 
             if subject == 'reload_successful':
                 self.reload()
+
+            if subject == 'throw' and body == '':
+                self.throw_weapon()
 
     def health_changed(self, controller):
         sensor = controller.sensors['property_changed']
@@ -120,9 +127,10 @@ class Player(bge.types.BL_ArmatureObject):
                 text.text_objects.append(text_obj)
 
     def try_reload(self):
+        if not self.weapon:
+            return
         if not self.clips_pistol:
             return
-
         if self.clips_pistol[0] == self.weapon['clip_size']:
             return
 
@@ -145,12 +153,23 @@ class Player(bge.types.BL_ArmatureObject):
     def take_weapon(self, weapon):
         # Save the old weapon somewhere
         self.weapon = weapon
+        self.weapon.free = False
         weapon.setParent(self.gun_pos, False, True)
         weapon.localPosition = [0, 0, 0]
         forward = [0, -1, 0]
         up = [0, 0, 1]
         weapon.alignAxisToVect(forward, 1)
         weapon.alignAxisToVect(up, 2)
+
+    def throw_weapon(self):
+        if not self.weapon:
+            return
+        self.weapon.free = True
+        self.weapon.localLinearVelocity = [0.0, -2.0, 0.0]
+        scene = bge.logic.getCurrentScene()
+        ground = scene.objects['ground']
+        self.weapon.setParent(ground, False, False)
+        self.weapon = None
 
 
 def convert_to_player(controller):

@@ -34,6 +34,7 @@ class Gun(bge.types.KX_GameObject):
         self.rate_fire = 0.3
         self.time_reload = 1.0  # How long it takes to reload
         self.clip_size = 12
+        self.free = True
 
     def message(self, controller):
         sensor = controller.sensors['message']
@@ -53,7 +54,8 @@ class Gun(bge.types.KX_GameObject):
                 self.reload()
 
     def update(self):
-        pass
+        if self.free:
+            self.applyForce(bge.logic.getCurrentScene().gravity)
 
     def reload(self):
         self['timer_shoot'] = 0.0
