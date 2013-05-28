@@ -13,8 +13,8 @@ mode. Before starting, switch view to camera.
 Keys
 ----
 
-Moving               : WASD
-Jump                 : Space
-Shoot                : Left mouse
-Reload               : R
-Throw current weapon : Q
+* Moving               : WASD
+* Jump                 : Space
+* Shoot                : Left mouse
+* Reload               : R
+* Throw current weapon : Q
