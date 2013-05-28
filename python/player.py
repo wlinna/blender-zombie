@@ -25,10 +25,13 @@ class Player(bge.types.BL_ArmatureObject):
         self.health = self['health']
         self.blood_effects = []
         scene = bge.logic.getCurrentScene()
+        self.gun_pos = self.childrenRecursive['gun_pos']
         # FIXME: Get gun somewhere else. This is semi dangerous
-        self.gun = scene.objects['pistol']
+        self.weapon = scene.objects['pistol']
+        self.take_weapon(self.weapon)
         self.character = bge.constraints.getCharacter(self)
-        self.clips_pistol = [12, 12, 12, 12]  # Temporary solution
+        self.clips_pistol = [self.weapon['clip_size']] * 4  # Temporary solution
+        print(self.clips_pistol)
         self.input_status = {
             'forward': False
             , 'backward': False
@@ -75,7 +78,7 @@ class Player(bge.types.BL_ArmatureObject):
             self.try_reload()
         if input_status['shoot']:
             if self.clips_pistol and self.clips_pistol[0] > 0:
-                self.sendMessage('shoot', '', self.gun.name)
+                self.sendMessage('shoot', '', self.weapon.name)
 
     def message(self, controller):
         sensor = controller.sensors['message']
@@ -120,16 +123,16 @@ class Player(bge.types.BL_ArmatureObject):
         if not self.clips_pistol:
             return
 
-        if self.clips_pistol[0] == self.gun['clip_size']:
+        if self.clips_pistol[0] == self.weapon['clip_size']:
             return
 
         if len(self.clips_pistol) == 1:
             return
 
-        if self.gun['timer_shoot'] < self.gun['reload_delay']:
+        if self.weapon['timer_shoot'] < self.weapon['reload_delay']:
             return
 
-        self.sendMessage('reload', '', self.gun.name)
+        self.sendMessage('reload', '', self.weapon.name)
 
 
     def reload(self):
@@ -138,6 +141,16 @@ class Player(bge.types.BL_ArmatureObject):
             self.clips_pistol.append(old_clip)
 
         print("Clips after reload:", self.clips_pistol)
+
+    def take_weapon(self, weapon):
+        # Save the old weapon somewhere
+        self.weapon = weapon
+        weapon.setParent(self.gun_pos, False, True)
+        weapon.localPosition = [0, 0, 0]
+        forward = [0, -1, 0]
+        up = [0, 0, 1]
+        weapon.alignAxisToVect(forward, 1)
+        weapon.alignAxisToVect(up, 2)
 
 
 def convert_to_player(controller):
